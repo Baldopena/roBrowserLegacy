@@ -14,7 +14,7 @@ import PACKETVER from './PacketVerManager.js';
 import Struct from 'Utils/Struct.js';
 import Configs from 'Core/Configs.js';
 
-import PasswordPolicy from 'Utils/PasswordPolicy.js';
+import { LOGIN_PASSWORD_FIELD_BYTES } from 'Utils/PasswordPolicy.js';
 
 const NAME_LENGTH = 24; // Must be equal to same name var in mmo.h, -1 reads the rest of the packet
 const MAP_NAME_LENGTH = 11 + 1;
@@ -59,13 +59,13 @@ PACKET.CA.LOGIN = function PACKET_CA_LOGIN() {
 	this.clienttype = 0;
 };
 PACKET.CA.LOGIN.prototype.build = function () {
-	const pkt_len = 2 + 4 + 24 + 24 + 1;
+	const pkt_len = 2 + 4 + 24 + LOGIN_PASSWORD_FIELD_BYTES + 1;
 	const pkt_buf = new BinaryWriter(pkt_len);
 
 	pkt_buf.writeShort(0x64);
 	pkt_buf.writeULong(this.Version);
 	pkt_buf.writeString(this.ID, 24);
-	pkt_buf.writeString(this.Passwd, 24);
+	pkt_buf.writeString(this.Passwd, LOGIN_PASSWORD_FIELD_BYTES);
 	pkt_buf.writeUChar(this.clienttype);
 	return pkt_buf;
 };
