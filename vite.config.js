@@ -87,7 +87,7 @@ export default defineConfig({
 		minify: false, // Makes the build run much faster
 		outDir: 'dist/Web',
 		rollupOptions: {
-			input: {
+		 	input: {
 				main: path.resolve(__dirname, 'index.html')
 			}
 		}

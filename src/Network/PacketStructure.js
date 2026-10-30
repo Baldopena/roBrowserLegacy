@@ -14,6 +14,8 @@ import PACKETVER from './PacketVerManager.js';
 import Struct from 'Utils/Struct.js';
 import Configs from 'Core/Configs.js';
 
+import PasswordPolicy from 'Utils/PasswordPolicy.js';
+
 const NAME_LENGTH = 24; // Must be equal to same name var in mmo.h, -1 reads the rest of the packet
 const MAP_NAME_LENGTH = 11 + 1;
 const MAP_NAME_LENGTH_EXT = MAP_NAME_LENGTH + 4;

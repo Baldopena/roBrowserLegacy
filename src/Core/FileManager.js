@@ -200,6 +200,14 @@ class FileManager {
 		// Trim the path
 		filename = filename.replace(/^\s+|\s+$/g, '');
 
+		// Always load translated item tables from RemoteClient
+		const normalizedPath = filename.replace(/\\/g, '/');
+
+		if (/^data\/(?:idnum2|num2)item(?:displayname|desc)table\.txt$/i.test(normalizedPath)) {
+			FileManager.getHTTP(normalizedPath, callback);
+			return;
+		}
+
 		if (fs && fs.existsSync(filename)) {
 			callback(fs.readFileSync(filename));
 			return;
