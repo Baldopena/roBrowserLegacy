@@ -11,6 +11,7 @@
 
 // Load dependencies
 import TextEncoding from 'Utils/CodepageManager.js';
+import { MAX_LOGIN_PASSWORD_BYTES } from 'Utils/PasswordPolicy.js';
 import DB from 'DB/DBManager.js';
 import BGM from 'Audio/BGM.js';
 import Sound from 'Audio/SoundManager.js';
@@ -230,6 +231,14 @@ class LoginEngine {
  * @param {string} password
  */
 function onConnectionRequest(username, password) {
+	if (TextEncoding.encode(password, 'utf-8').length > MAX_LOGIN_PASSWORD_BYTES) {
+		UIManager.showMessageBox(
+			`Password must be ${MAX_LOGIN_PASSWORD_BYTES} UTF-8 bytes or fewer.`,
+			'ok'
+		);
+		return;
+	}
+
 	// Play "¹öÆ°¼Ò¸®.wav" (possible problem with charset)
 	Sound.play('\xB9\xF6\xC6\xB0\xBC\xD2\xB8\xAE.wav');
 

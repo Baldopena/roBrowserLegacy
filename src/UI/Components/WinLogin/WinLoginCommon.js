@@ -14,6 +14,8 @@ import KEYS from 'Controls/KeyEventHandler.js';
 import UIManager from 'UI/UIManager.js';
 import GUIComponent from 'UI/GUIComponent.js';
 import PerfProbe from 'Core/PerfProbe.js';
+import TextEncoding from 'Utils/CodepageManager.js';
+import { MAX_LOGIN_PASSWORD_BYTES } from 'Utils/PasswordPolicy.js';
 import 'UI/Elements/Elements.js';
 
 export function createWinLogin({ name, htmlText, cssText }) {
@@ -153,6 +155,15 @@ export function createWinLogin({ name, htmlText, cssText }) {
 	function connect() {
 		const user = _inputUsername.value;
 		const pass = _inputPassword.value;
+
+		if (TextEncoding.encode(pass, 'utf-8').length > MAX_LOGIN_PASSWORD_BYTES) {
+			UIManager.showMessageBox(
+				`Password must be ${MAX_LOGIN_PASSWORD_BYTES} UTF-8 bytes or fewer.`,
+				'ok'
+			);
+			return false;
+		}
+
 		if (_preferences.saveID) {
 			_preferences.saveID = true;
 			_preferences.ID = user;
