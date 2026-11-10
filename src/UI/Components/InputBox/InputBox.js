@@ -219,6 +219,17 @@ InputBox.setType = function setType(type, isPersistent, defaultVal, itemId = nul
 			}
 			break;
 
+		case 'delete-character-name':
+			innerRoot.classList.remove('number');
+			if (textEl) {
+				textEl.textContent = 'Enter the character name exactly (case-sensitive).';
+			}
+			if (input) {
+				input.type = 'text';
+				input.value = '';
+			}
+			break;
+
 		case 'birthdate':
 			innerRoot.classList.remove('number');
 			if (textEl) {
