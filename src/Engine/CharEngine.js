@@ -364,7 +364,7 @@ function onDeleteRequest(charID) {
 		if (PACKETVER.value > 20100803) {
 			const pkt = new PACKET.CH.DELETE_CHAR3();
 			pkt.GID = charID;
-			pkt.Birth = _inputValue.substring(2); // Server only needs the 6 digits
+			pkt.Name = _inputValue; // GrassRO: exact character-name confirmation
 			Network.sendPacket(pkt);
 		} else {
 			const pkt = new PACKET.CH.DELETE_CHAR();
@@ -387,7 +387,7 @@ function onDeleteRequest(charID) {
 	function onOk() {
 		InputBox.append();
 		if (PACKETVER.value >= 20100803) {
-			InputBox.setType('birthdate', true);
+			InputBox.setType('delete-character-name', true);
 		} else {
 			InputBox.setType('mail', true);
 		}
@@ -405,6 +405,14 @@ function onDeleteRequest(charID) {
 
 	// Submit the mail/birthdate
 	function onSubmit(input) {
+		if (PACKETVER.value > 20100803) {
+			const nameBytes = typeof input === 'string' ? new TextEncoder().encode(input) : null;
+
+			if (!nameBytes || nameBytes.length === 0 || nameBytes.length > 23 || nameBytes.includes(0)) {
+				UIManager.showMessageBox('Enter a valid character name (maximum 23 UTF-8 bytes).', 'ok');
+				return;
+			}
+		}
 		_inputValue = input;
 		InputBox.remove();
 		_ui_box.remove();
@@ -490,6 +498,11 @@ function onDeleteAnswer(pkt) {
 	} else {
 		// Birthday deletion result
 		result = typeof pkt.Result === 'undefined' ? -1 : pkt.Result;
+	}
+	if (PACKETVER.value > 20100803 && result === 5) {
+		CharSelect.deleteAnswer(-2);
+		UIManager.showMessageBox('Character name does not match. Please try again.', 'ok');
+		return;
 	}
 	CharSelect.deleteAnswer(result);
 }

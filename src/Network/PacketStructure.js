@@ -4323,15 +4323,15 @@ PACKET.CH.DELETE_CHAR3_RESERVED.prototype.build = function () {
 // 0x829
 PACKET.CH.DELETE_CHAR3 = function PACKET_CH_DELETE_CHAR3() {
 	this.GID = 0;
-	this.Birth = '';
+	this.Name = '';
 };
 PACKET.CH.DELETE_CHAR3.prototype.build = function () {
-	const pkt_len = 2 + 4 + 6;
+	const pkt_len = 2 + 4 + 24;
 	const pkt_buf = new BinaryWriter(pkt_len);
 
 	pkt_buf.writeShort(0x829);
 	pkt_buf.writeULong(this.GID);
-	pkt_buf.writeString(this.Birth, 6);
+	pkt_buf.writeString(this.Name, 24);
 	return pkt_buf;
 };
 
